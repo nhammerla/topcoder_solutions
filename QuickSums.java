@@ -1,14 +1,15 @@
 // http://community.topcoder.com/stat?c=problem_statement&pm=2829&rd=5072
 class QuickSums {
   public static int minSums(String numbers, int sum) {
-    return QuickSums.minSums(numbers, sum, 0, new String(""));
+    int res = QuickSums.minSums(numbers, sum, 0, new String(""));
+    return (res == Integer.MAX_VALUE ? -1 : res-1); // note res-1 as we count operands, not summations.
   }
 
   // for recursion
   public static int minSums(String numbers, int sum, int numSum, String seq) {
     if (sum < 0) {
       // we overshot
-      return -1;
+      return Integer.MAX_VALUE;
     }
 
     if (numbers.length() == 0) {
@@ -19,13 +20,13 @@ class QuickSums {
         return numSum;
       } else {
         // this didn't work
-        return -1;
+        return Integer.MAX_VALUE;
       }
     }
 
     // initialise
-    int res1 = -1;
-    int res2 = -1;
+    int res1 = Integer.MAX_VALUE;
+    int res2 = Integer.MAX_VALUE;
 
     if (numbers.substring(0,1).equals("0")) {
       // special case: don't add zeros
@@ -42,22 +43,13 @@ class QuickSums {
       }
 
       // check and return
-      if (res1 == -1 && res2 == -1) {
-        return -1;
-      } else if (res1 == -1 && res2 != -1) {
-        return res2;
-      } else if (res1 != -1 && res2 == -1) {
-        return res1;
-      } else {
-        // return smaller number of sums
-        return res1 < res2 ? res1 : res2;
-      }
+      return Math.min(res1, res2);
     }
   }
 
   public static void main(String[] args) {
-    String numbers = new String("382834");
-    int target = 100;
+    String numbers = new String("9230560001");
+    int target = 71;
     System.out.println("Minimum additions: " + QuickSums.minSums(numbers, target));
 
   }
